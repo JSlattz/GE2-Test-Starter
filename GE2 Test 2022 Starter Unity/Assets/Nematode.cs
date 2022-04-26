@@ -4,13 +4,53 @@ using UnityEngine;
 
 public class Nematode : MonoBehaviour
 {
-    public int length = 5;
+    public int lengthL;
+    private int length;
+    public int lengthMin = 5;
+    public int lengthMax = 25;
+    int j = 0;
+
+    public GameObject firstSphere;
 
     public Material material;
 
     void Awake()
     {
-        // Put your code here!
+
+
+        length = Random.Range(lengthMin, lengthMax);
+        lengthL = length;
+
+        for(int i = 0; i < length; i++ )
+        {
+            float height = 1f / length * i;
+
+             firstSphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
+            MeshRenderer meshRenderer = firstSphere.GetComponent<MeshRenderer>();
+            if (i == 0)
+            {
+                firstSphere.AddComponent<Boid>();
+                firstSphere.AddComponent<ObstacleAvoidance>();
+                firstSphere.AddComponent<NoiseWander>();
+                firstSphere.AddComponent<Constrain>();
+
+            }
+
+            firstSphere.transform.position = new Vector3(0f, 0f, i);
+            meshRenderer.material.color = Color.HSVToRGB(height, 1f, 1f);
+            firstSphere.transform.SetParent(transform);
+            firstSphere.transform.localPosition = new Vector3(0f, 0f, i * 1f);
+
+        }
+        if (j <= Mathf.Ceil(length / 2))
+        {
+            firstSphere.transform.localScale += new Vector3(0.2f, 0.2f, 0.2f);
+        }
+        else
+        {
+            firstSphere.transform.localScale -= new Vector3(0.2f, 0.2f, 0.2f);
+        }
+
     }
 
 
